@@ -18,6 +18,13 @@ class Tag(models.Model):
     slug = models.SlugField("url", max_length=100, unique=True)
     published = models.BooleanField("Отображать?", default=True)
 
+    def __str__(self):
+        return '{0} '.format(self.name)
+
+    class Meta:
+        verbose_name = "Тэг"
+        verbose_name_plural = "Тэги"
+
 
 class Post(models.Model):
     """Модель постов"""
@@ -27,9 +34,23 @@ class Post(models.Model):
     created_date = models.DateTimeField("Дата создания", auto_now_add=True)
     slug = models.SlugField("url", max_length=100, unique=True)
 
+    def __str__(self):
+        return self.title, self.mini_text, self.text, self.created_date
+
+    class Meta:
+        verbose_name = "Пост"
+        verbose_name_plural = "Посты"
+
 class Comment(models.Model):
     """Модель комментариев"""
     text = models.TextField("Текст комментария")
     created_date = models.DateTimeField("Дата создания", auto_now=True)
     moderation = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.text, self.created_date
+
+    class Meta:
+        verbose_name = "Комментарий"
+        verbose_name_plural = "Комментарии"
 
