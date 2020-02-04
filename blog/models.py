@@ -71,7 +71,7 @@ class Post(models.Model):
         null=True
     )
     image = models.ImageField("Главная фотография", upload_to="post/", null=True, blank=True)
-    tags = models.ManyToManyField(Tag, verbose_name="Тег", blank=True)
+    tags = models.ManyToManyField(Tag(), verbose_name="Тег", blank=True)
     category = models.ForeignKey(
         Category,
         verbose_name="Категория",
