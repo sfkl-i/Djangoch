@@ -71,7 +71,7 @@ class Post(models.Model):
         null=True
     )
     image = models.ImageField("Главная фотография", upload_to="post/", null=True, blank=True)
-    tags = models.ManyToManyField(Tag, verbose_name="Тег", blank=True)
+    tags = models.ManyToManyField(Tag, verbose_name="Тег", blank=True, related_name='tag')
     category = models.ForeignKey(
         Category,
         verbose_name="Категория",
@@ -118,10 +118,11 @@ class Comment(models.Model):
     created_date = models.DateTimeField("Дата создания", auto_now=True)
     moderation = models.BooleanField(default=True)
 
-    def __str__(self):
-        return self.text
+    # def __str__(self):
+    #     return self.text
 
     class Meta:
         verbose_name = "Комментарий"
         verbose_name_plural = "Комментарии"
+
 
