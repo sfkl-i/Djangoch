@@ -8,7 +8,7 @@ from mptt.models import MPTTModel
 
 class Category(MPTTModel):
     """Модель категорий"""
-    name = models.CharField(verbose_name="Имя", max_length=100)
+    name = models.CharField("Название", max_length=100)
     slug = models.SlugField("url", max_length=100)
     description = models.TextField('Описание', max_length=1000, default="", blank=True)
 
@@ -20,7 +20,7 @@ class Category(MPTTModel):
         blank=True,
         related_name='children'
     )
-    template = models.CharField("Шаблон", max_length=500, default="blog/post_list/html")
+    template = models.CharField("Шаблон", max_length=500, default="blog/post_list.html")
     published = models.BooleanField("Отображать?", default=True)
     paginated = models.PositiveIntegerField("Количество новостей на странице", default=5)
     sort = models.PositiveIntegerField("Порядок", default=0)
@@ -31,6 +31,10 @@ class Category(MPTTModel):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('category', kwargs={'category_slug': self.slug})
+
 
 class Tag(models.Model):
     """Моедль тегов"""
@@ -96,6 +100,9 @@ class Post(models.Model):
 
     def get_comments_count(self):
         return self.comments.count()
+
+    def get_category_template(self):
+        return self.category.template
 
     def __str__(self):
         return "{}".format(self.title)

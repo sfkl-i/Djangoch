@@ -5,17 +5,41 @@
     <title>Title</title>
 </head>
 <body>
-    {% for category in categories%}
-        <p><a href="{%url 'category' category.slug%}">{{category.name }}</a></p>
-    {% endfor %}
+{% for category in categories %}
+    <p><a href="{% url 'category' category.slug %}">{{ category.name }}</a></p>
+{% endfor %}
 <hr>
-    <h2>>{{ post.title }}</h2>
-    <small>Категория: {{ post.category }}</small>
-    <h3><small>{{ post.subtitle }}</small></h3>
+    <h1>{{ post.title }}</h1>
+    <h4>{{ post.subtitle }}</h4>
     <p>{{ post.mini_text }}</p>
-    <small>{{ post.published_date }}</small>
-    <small>{{ post.viewed }} просмотров</small>
-    <h4><small>{{ post.tags }}</small></h4>
+    <p>Категория - {{ post.category }}</p>
 
+    Теги - {% for tag in post.get_tags %}
+                {% if tag.published %}
+                    <a href="{% url 'tag' tag.slug %}">{{ tag.name }}</a>,
+                {% endif %}
+            {% endfor %}
+    <br>
+    <small>Автор: {{ post.author }} - {{ post.published_date }}</small><br>
+    <small>Просмотров: {{ post.viewed }}</small>
+    <hr>
+
+    <h4>Комментарии</h4>
+        {% if user.is_authenticated %}
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+    {#            <textarea name="text" cols="25" rows="10"></textarea><br> - без формы#}
+                <button type="submit">Отправить</button>
+            </form>
+        {% else %}
+            <p>Чтобы оставить комментарий, войдите на сайт</p>
+        {% endif %}
+    <hr>
+     {% for comment in post.comments.all %}
+        Пользователь - {{ comment.author }}<br>
+        {{ comment.text }} <br>
+        Добавлен - {{ comment.created_date }}<br><br>
+     {% endfor %}
 </body>
 </html>
