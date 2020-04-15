@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.base import View
 from .models import Category, Post, Comment, Tag
@@ -13,7 +13,7 @@ class PostListView(View):
         return Post.objects.filter(published_date__lte=datetime.now(), published=True)
 
     def get(self, request, category_slug=None, slug=None):
-        category_list = Category.objects.filter(published=True)
+        # category_list = Category.objects.filter(published=True)
         if category_slug is not None:
             posts = self.get_queryset().filter(category__slug=category_slug, category__published=True, published=True)
         elif slug is not None:
@@ -23,8 +23,9 @@ class PostListView(View):
         if posts.exists():
             template = posts.first().get_category_template()
         else:
-            template = "blog/post_list.html"
-        return render(request, template, {"post_list": posts, "categories": category_list})
+            # template = "blog/post_list.html"
+            raise Http404("Статей в данной категории не существует. Скоро добавим)")
+        return render(request, template, {"post_list": posts})
 
 
 class PostDetailView(View):
@@ -49,7 +50,6 @@ class PostDetailView(View):
 
 
 # class CreateCommentView(View):
-#     """Вывод комментариев"""
 #     def post(self, request, pk):
 #         form = CommentForm(request.POST)
 #         if form.is_valid():
@@ -57,10 +57,4 @@ class PostDetailView(View):
 #             form.post_id = pk
 #             form.author = request.user
 #             form.save()
-#         print(request.POST)
-#         comment = Comment()
-#         comment.author = request.user
-#         comment.post_id = request.POST.get("post")
-#         comment.text = request.POST.get('text')
-#         comment.save()
 #         return HttpResponse(status=201)

@@ -29,6 +29,9 @@ class Category(MPTTModel):
         verbose_name = "Категория новостей"
         verbose_name_plural = "Категории новостей"
 
+    class MPTTMeta:
+        order_insertion_by = ('sort', )
+
     def __str__(self):
         return self.name
 
@@ -65,11 +68,14 @@ class Post(models.Model):
     mini_text = models.TextField("Краткое содержание", max_length=5000)
     text = models.TextField("Текст", max_length=10000000)
     created_date = models.DateTimeField("Дата создания", auto_now_add=True)
-
-    #
-    #
-    published_date = models.DateTimeField(
+    edit_date = models.DateTimeField(
         "Дата редактирования",
+        default=timezone.now,
+        blank=True,
+        null=True
+    )
+    published_date = models.DateTimeField(
+        "Дата публикации",
         default=timezone.now,
         blank=True,
         null=True
@@ -91,6 +97,7 @@ class Post(models.Model):
     class Meta:
         verbose_name = "Новость"
         verbose_name_plural = "Новости"
+        ordering = ['sort', '-published_date']
 
     def get_absolute_url(self):
         return reverse('detail_post', kwargs={'category': self.category.slug, 'slug': self.slug})
@@ -131,5 +138,3 @@ class Comment(models.Model):
     class Meta:
         verbose_name = "Комментарий"
         verbose_name_plural = "Комментарии"
-
-
