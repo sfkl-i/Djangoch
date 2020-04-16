@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import Category, Tag, Comment, Post
 from pages.admin import ActionPublish
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from django import forms
 
 
 class CategoryAdmin(ActionPublish):
@@ -19,29 +21,25 @@ class CommentsInline(admin.TabularInline):
     extra = 1
 
 
+class PostAdminForm(forms.ModelForm):
+    """Виджет редактора ckeditor"""
+    text = forms.CharField(required=False, label="Контент страницы", widget=CKEditorUploadingWidget())
+
+    class Meta:
+        model = Post
+        fields = '__all__'
+
+
 class PostAdmin(ActionPublish):
-    """Посты блога"""
     inlines = [CommentsInline]
-    filter_horizontal = ("tags",)
-    fieldsets = (
-        ('Контент', {
-            'fields': ('author', 'title', 'subtitle', 'slug'),
-        }),
-        ('Контент 2', {
-            'fields': ('mini_text', 'text', 'image'),
-        }),
-        ('Даты', {
-            'fields': ('edit_date', 'published_date'),
-        }),
-        ('Завязки', {
-            'classes': ('wide', 'extrapretty'),
-            'fields': ('tags', 'category'),
-        }),
-        ('Настройки', {
-            'classes': ('collapse',),
-            'fields': ('template', 'published', 'status', 'sort', 'viewed'),
-        }),
-    )
+    list_display = ("title", "published", "id", 'category')
+    list_editable = ("published", "category")
+    list_filter = ("published", "template", "category")
+    search_fields = ("title",)
+    prepopulated_fields = {"slug": ("title",)}
+    form = PostAdminForm
+    actions = ['unpublish', 'publish']
+    save_on_top = True
 
 
 admin.site.register(Category, CategoryAdmin)
