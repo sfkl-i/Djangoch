@@ -32,6 +32,7 @@ class PostAdminForm(forms.ModelForm):
 
 class PostAdmin(ActionPublish):
     inlines = [CommentsInline]
+    filter_horizontal = ("tags",)
     list_display = ("title", "published", "id", 'category')
     list_editable = ("published", "category")
     list_filter = ("published", "template", "category")
