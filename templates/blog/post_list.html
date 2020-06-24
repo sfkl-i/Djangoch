@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <title>Title</title>
 </head>
 <body>
@@ -16,7 +17,7 @@
 {% category_list template='base/blog/categories.html'%}
 <hr>
 {% if post_list %}
-    {% for post in post_list %}
+    {% for post in post_list.object_list %}
         <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
         <p>{{ post.mini_text }}</p>
         <small>{{ post.published_date }}</small>
@@ -25,6 +26,30 @@
     {% endfor %}
 {% else %}
     <h2>Статей нет</h2>{#  Не рабоатет если в views raise http404(), работает с указанием шаблона#}
+{% endif %}
+{% if is_paginated %}
+<nav aria-label="...">
+  <ul class="pagination">
+    <li class="page-item {% if not prev_url %}disabled{% endif %}">
+      <a class="page-link" href="{{ prev_url }}" tabindex="-1" aria-disabled="true">Previous</a>
+    </li>
+      {% for n in post_list.paginator.page_range %}
+          {% if post_list.number == n %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page=={{ n }}">{{ n }}<span class="sr-only">(current)</span></a>
+            </li>
+          {% else %}
+          <li class="page-item">
+              <a class="page-link" href="?page={{ n }}">{{ n }}</a>
+          </li>
+          {% endif %}
+      {% endfor %}
+
+ <li class="page-item {% if not next_url %}disabled{% endif %}">
+      <a class="page-link" href="{{ next_url }}" tabindex="-1" aria-disabled="true">Next</a>
+    </li>
+  </ul>
+</nav>
 {% endif %}
 </body>
 </html>

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from django.db.models import Q
 
@@ -22,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'rwp(om1@1)nc7ct8zf5bh67nz)k6mcfv9!34oaog(5qtk1#g!u'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -46,7 +47,11 @@ INSTALLED_APPS = [
 
     'allauth',
     'allauth.account',
-    # 'allauth.socialaccount',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.vk',
+    'crispy_forms',
 
     'blog',
     'menu',
@@ -220,16 +225,17 @@ AUTHENTICATION_BACKENDS = (
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 
 # Allauth
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_UNIQUE = True
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_EMAIL_UNIQUE = True
 # ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
-ACCOUNT_AUTHENTICATION_METHOD = "username"
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
-ACCOUNT_EMAIL_VERIFICATION = "optional"
-ACCOUNT_USERNAME_BLACKLIST = ["admin", "administrator", "moderator", "sofokl"]
-ACCOUNT_USERNAME_MIN_LENGTH = 4
-LOGIN_REDIRECT_URL = "/"
-ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/'
+# ACCOUNT_AUTHENTICATION_METHOD = "username"
+# ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+# ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_USERNAME_BLACKLIST = ["admin"]
+# ACCOUNT_USERNAME_MIN_LENGTH = 4
+# ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = False
+# LOGIN_REDIRECT_URL = "/news/"
+# ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/'
 # ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 
 
@@ -239,3 +245,5 @@ MENU_APPS = (
         Q(app_label='blog', model='post') |
         Q(app_label='blog', model='category')
 )
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

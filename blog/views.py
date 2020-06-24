@@ -5,6 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.base import View
 from .models import Category, Post, Comment, Tag
 from .forms import CommentForm
+from django.core.paginator import Paginator
 
 
 class PostListView(View):
@@ -25,7 +26,31 @@ class PostListView(View):
         else:
             # template = "blog/post_list.html"
             raise Http404("Статей в данной категории не существует. Скоро добавим)")
-        return render(request, template, {"post_list": posts})
+
+        paginator = Paginator(posts, 2)
+
+        page_number = request.GET.get('page', 1)
+        page = paginator.get_page(page_number)
+
+        is_paginated = page.has_other_pages()
+
+        if page.has_previous():
+            prev_url = '?page={}'.format(page.previous_page_number())
+        else:
+            prev_url = ''
+
+        if page.has_next():
+            next_url = '?page={}'.format(page.next_page_number())
+        else:
+            next_url = ''
+        return render(request, template,
+                      {
+                          "post_list": page,
+                          'is_paginated': is_paginated,
+                          'next_url': next_url,
+                          'prev_url': prev_url
+                       }
+                      )
 
 
 class PostDetailView(View):

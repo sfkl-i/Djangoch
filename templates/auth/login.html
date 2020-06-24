@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "css/login.css" %}">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="enter-form">
+        <form action="{% url 'account_login' %}" method="POST">
+            {% csrf_token %}
+            <h1 class="enter-text">Вход</h1>
+            <a class="text1-enter" href="/accounts/signup">Зарегестрироваться</a> <br>
+            <input class="input1-enter" type="text" name="login" required id="id_login"
+                   placeholder="Имя пользователя" autofocus="autofocus"> <br>
+            <input class="input2-enter" type="password" name="password"
+                   required id="id_password" placeholder="Пароль">
+            <div class="remember">
+                <p class="remember-enter">Запомнить меня:</p>
+                <input class="check-enter" type="checkbox" name="remember" id="id_remember">
+            </div>
+
+            <input class="button-enter" type="submit" value="Войти"><br>
+            <a class="forget-enter" href="/accounts/password/reset/">Я не помню пароль</a>
+        </form>
+
+
+    </div>
+</body>
+
+</html>

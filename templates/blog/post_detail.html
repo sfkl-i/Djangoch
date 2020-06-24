@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 {% load blog_tags %}
+{% load socialaccount %}
+{% providers_media_js %}
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -24,7 +27,13 @@
     <small>Автор: {{ post.author }} - {{ post.published_date }}</small><br>
     <small>Просмотров: {{ post.viewed }}</small>
     <hr>
-
+{{ user }}
+<p><a href="{% provider_login_url "google" %}?next={{request.path}}"><img src={% static "images/google.png" %} width="30"
+   height="30" alt="Пример"></a></p>
+<p><a href="{% provider_login_url "facebook" method="oauth2" %}"><img src={% static "images/facebook.png" %} width="30"
+   height="30" alt="Пример"></a></p>
+<p><a href="{% provider_login_url "vk" %}"><img src={% static "images/vk.png" %} width="30"
+   height="30" alt="Пример"></a></p>
     <h4>Комментарии</h4>
         {% if user.is_authenticated %}
             <form action="" method="post">

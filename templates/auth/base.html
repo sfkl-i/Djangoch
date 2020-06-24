@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{#{% load static %}#}
+<html>
+  <head>
+{#    <link rel="stylesheet" href="{% static "css/reg.css" %}">#}
+{#    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">#}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>{% block head_title %}{% endblock %}</title>
+    {% block extra_head %}
+    {% endblock %}
+  </head>
+  <body>
+    {% block body %}
+
+    {% if messages %}
+    <div>
+      <strong>Messages:</strong>
+      <ul>
+        {% for message in messages %}
+        <li>{{message}}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+{#    <div>#}
+{#      <strong>Menu:</strong>#}
+{#      <ul>#}
+{#        {% if user.is_authenticated %}#}
+{#        <li><a href="{% url 'account_email' %}">Change E-mail</a></li>#}
+{#        <li><a href="{% url 'account_logout' %}">Sign Out</a></li>#}
+{#        {% else %}#}
+{#        <li><a href="{% url 'account_login' %}">Sign In</a></li>#}
+{#        <li><a href="{% url 'account_signup' %}">Sign Up</a></li>#}
+{#        {% endif %}#}
+{#      </ul>#}
+{#    </div>#}
+        <div>
+    {% block content %}
+        </div>
+    {% endblock %}
+    {% endblock %}
+    {% block extra_body %}
+    {% endblock %}
+  </body>
+</html>
